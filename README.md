@@ -59,14 +59,3 @@ To stop scheduled operation:
 ```bash
 launchctl bootout "gui/$(id -u)" ~/Library/LaunchAgents/com.example.micro-pr.plist
 ```
-
-Your Mac must be on and the signed-in user session available. The process needs Git, Cargo, `gh`, a clean repository, and valid credentials. Each invocation produces at most one PR; concurrent launches are not supported. The **905** limit is the number of potential fixtures, not a promise of merged or achievement-eligible PRs.
-
-## Important limitations
-
-- GitHub's actual Pull Shark eligible PR counter may not match `gh api search/issues` totals. No achievement tier is guaranteed.
-- These fixtures exercise a genuine formatter but are deliberately highly granular, and are not substitutes for substantial contributions.
-- Merge automation relies on repository rules and CI configuration. The tool **requests** auto-merge; GitHub decides when conditions are met.
-- If a step fails after branching, the local repository may remain on the feature branch, requiring manual cleanup before retrying.
-- Running this project locally does not publish or change your private RuntimeShadow project.
-- The tool doesn't submit on its own until you explicitly pass `--execute`; it does not create all 905 PRs in one invocation.
