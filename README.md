@@ -2,7 +2,6 @@
 
 A **new, standalone** Rust repository combining an amount-formatting library, deterministic regression fixtures, and an opt-in PR automation CLI. It **does not modify your existing repositories**.
 
-The CLI is designed for up to **905 distinct small fixture PRs**, one per invocation. This is deliberately conservative: it does not spam GitHub in a tight loop, and **there is no guarantee GitHub will award Pull Shark progress for these PRs**. Repetitive micro-PRs created purely to inflate an achievement may be treated as low-value activity. Prefer real independent work if professional recognition is your goal.
 
 ## Requirements
 
