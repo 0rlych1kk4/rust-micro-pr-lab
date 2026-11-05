@@ -40,7 +40,7 @@ cargo run -- run --execute
 cargo run -- run --execute --auto-merge
 ```
 
-Each execution performs at most **one** real, tracked code/test fixture change and one PR. It refuses to continue if there is an open PR, if your local repo is dirty, if tests fail, or once all 905 fixtures exist. The PR is created via `gh pr create` under the identity authenticated locally.
+Each execution performs at most **one** real, tracked code/test fixture change and one PR. The PR is created via `gh pr create` under the identity authenticated locally.
 
 After a successful merge, execute the same command again to create the next PR.
 
