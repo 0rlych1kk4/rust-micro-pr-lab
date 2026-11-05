@@ -1,0 +1,13 @@
+[package]
+name = "rust-micro-pr-lab"
+version = "0.1.0"
+edition = "2021"
+description = "A self-contained Rust fixture lab and one-PR-at-a-time GitHub automation"
+license = "MIT"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "micro-pr"
+path = "src/main.rs"

@@ -1,0 +1,72 @@
+# Rust Micro PR Lab
+
+A **new, standalone** Rust repository combining an amount-formatting library, deterministic regression fixtures, and an opt-in PR automation CLI. It **does not modify your existing repositories**.
+
+The CLI is designed for up to **905 distinct small fixture PRs**, one per invocation. This is deliberately conservative: it does not spam GitHub in a tight loop, and **there is no guarantee GitHub will award Pull Shark progress for these PRs**. Repetitive micro-PRs created purely to inflate an achievement may be treated as low-value activity. Prefer real independent work if professional recognition is your goal.
+
+## Requirements
+
+- macOS/Linux with Rust (`cargo`, `rustc`), `git`, GitHub CLI (`gh`)
+- Logged in via `gh auth login`; `gh auth status` works
+- A **new GitHub repository**, with `main` branch and `origin` remote
+- Repository Settings → General → Pull Requests → **Allow auto-merge** enabled
+- Repository ruleset/branch protection requiring the **validate** CI job before merging (otherwise auto-merge might merge immediately)
+- Git identity matches your intended GitHub account; create PRs using your own `gh` authentication
+
+## Initial setup on Mac
+
+```bash
+unzip rust-micro-pr-lab.zip
+cd rust-micro-pr-lab
+cargo fmt --all
+cargo clippy --all-targets -- -D warnings
+cargo test --all
+cargo build --release
+
+gh auth status
+# Create a NEW GitHub repo and push the starter project (do not use an existing repo):
+git init -b main
+git add .
+git commit -m 'feat: initialize Rust micro PR lab'
+gh repo create rust-micro-pr-lab --public --source=. --remote=origin --push
+```
+
+Configure ruleset requiring GitHub Actions status check `validate` after the CI workflow appears, and enable auto-merge. Verify protection before enabling unattended operation.
+
+## Commands
+
+```bash
+cargo run -- plan
+cargo run -- run --execute
+cargo run -- run --execute --auto-merge
+```
+
+Each execution performs at most **one** real, tracked code/test fixture change and one PR. It refuses to continue if there is an open PR, if your local repo is dirty, if tests fail, or once all 905 fixtures exist. The PR is created via `gh pr create` under the identity authenticated locally.
+
+After a successful merge, execute the same command again to create the next PR.
+
+### Optional automatic macOS scheduling
+
+The bundled `examples/com.example.micro-pr.plist` runs the Rust executable every 6 hours. Replace both `REPLACE_USERNAME` placeholders with your actual macOS username and adjust the repository path. Verify one manual run first, then:
+
+```bash
+cp examples/com.example.micro-pr.plist ~/Library/LaunchAgents/com.example.micro-pr.plist
+launchctl bootstrap "gui/$(id -u)" ~/Library/LaunchAgents/com.example.micro-pr.plist
+```
+
+To stop scheduled operation:
+
+```bash
+launchctl bootout "gui/$(id -u)" ~/Library/LaunchAgents/com.example.micro-pr.plist
+```
+
+Your Mac must be on and the signed-in user session available. The process needs Git, Cargo, `gh`, a clean repository, and valid credentials. Each invocation produces at most one PR; concurrent launches are not supported. The **905** limit is the number of potential fixtures, not a promise of merged or achievement-eligible PRs.
+
+## Important limitations
+
+- GitHub's actual Pull Shark eligible PR counter may not match `gh api search/issues` totals. No achievement tier is guaranteed.
+- These fixtures exercise a genuine formatter but are deliberately highly granular, and are not substitutes for substantial contributions.
+- Merge automation relies on repository rules and CI configuration. The tool **requests** auto-merge; GitHub decides when conditions are met.
+- If a step fails after branching, the local repository may remain on the feature branch, requiring manual cleanup before retrying.
+- Running this project locally does not publish or change your private RuntimeShadow project.
+- The tool doesn't submit on its own until you explicitly pass `--execute`; it does not create all 905 PRs in one invocation.
